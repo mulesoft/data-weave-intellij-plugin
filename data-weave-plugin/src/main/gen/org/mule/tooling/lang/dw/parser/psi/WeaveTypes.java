@@ -116,6 +116,8 @@ public interface WeaveTypes {
   IElementType OUTPUT_DIRECTIVE = new WeaveElementType("OUTPUT_DIRECTIVE");
   IElementType PATTERN = new WeaveElementType("PATTERN");
   IElementType PATTERN_MATCHER_EXPRESSION = new WeaveElementType("PATTERN_MATCHER_EXPRESSION");
+  IElementType PRIVATE_FUNCTION_DEFINITION = new WeaveElementType("PRIVATE_FUNCTION_DEFINITION");
+  IElementType PRIVATE_FUNCTION_DIRECTIVE = new WeaveElementType("PRIVATE_FUNCTION_DIRECTIVE");
   IElementType QUALIFIED_NAME = new WeaveElementType("QUALIFIED_NAME");
   IElementType REFERENCE_TYPE = new WeaveElementType("REFERENCE_TYPE");
   IElementType REGEX_LITERAL = new WeaveElementType("REGEX_LITERAL");
@@ -212,6 +214,7 @@ public interface WeaveTypes {
   IElementType OUTPUT_DIRECTIVE_KEYWORD = new WeaveTokenType("output");
   IElementType PACKAGE_SEPARATOR = new WeaveTokenType("::");
   IElementType PLUS = new WeaveTokenType("+");
+  IElementType PRIVATE_DIRECTIVE_KEYWORD = new WeaveTokenType("private");
   IElementType QUESTION = new WeaveTokenType("?");
   IElementType RULE_ANY_DATE = new WeaveTokenType("RULE_ANY_DATE");
   IElementType RULE_ANY_REGEX = new WeaveTokenType("RULE_ANY_REGEX");
@@ -541,6 +544,12 @@ public interface WeaveTypes {
       }
       else if (type == PATTERN_MATCHER_EXPRESSION) {
         return new WeavePatternMatcherExpressionImpl(node);
+      }
+      else if (type == PRIVATE_FUNCTION_DEFINITION) {
+        return new WeavePrivateFunctionDefinitionImpl(node);
+      }
+      else if (type == PRIVATE_FUNCTION_DIRECTIVE) {
+        return new WeavePrivateFunctionDirectiveImpl(node);
       }
       else if (type == QUALIFIED_NAME) {
         return new WeaveQualifiedNameImpl(node);

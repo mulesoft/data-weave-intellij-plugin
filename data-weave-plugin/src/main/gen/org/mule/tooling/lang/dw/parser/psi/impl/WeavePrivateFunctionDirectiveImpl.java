@@ -10,15 +10,15 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.mule.tooling.lang.dw.parser.psi.WeaveTypes.*;
 import org.mule.tooling.lang.dw.parser.psi.*;
 
-public class WeaveFunctionDirectiveImpl extends WeaveDirectiveImpl implements WeaveFunctionDirective {
+public class WeavePrivateFunctionDirectiveImpl extends WeaveDirectiveImpl implements WeavePrivateFunctionDirective {
 
-  public WeaveFunctionDirectiveImpl(@NotNull ASTNode node) {
+  public WeavePrivateFunctionDirectiveImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   @Override
   public void accept(@NotNull WeaveVisitor visitor) {
-    visitor.visitFunctionDirective(this);
+    visitor.visitPrivateFunctionDirective(this);
   }
 
   @Override
@@ -34,9 +34,9 @@ public class WeaveFunctionDirectiveImpl extends WeaveDirectiveImpl implements We
   }
 
   @Override
-  @NotNull
-  public WeaveFunctionDefinition getFunctionDefinition() {
-    return findNotNullChildByClass(WeaveFunctionDefinition.class);
+  @Nullable
+  public WeavePrivateFunctionDefinition getPrivateFunctionDefinition() {
+    return findChildByClass(WeavePrivateFunctionDefinition.class);
   }
 
 }

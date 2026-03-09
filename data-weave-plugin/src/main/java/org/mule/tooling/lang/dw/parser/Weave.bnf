@@ -76,6 +76,7 @@
         VERSION_DIRECTIVE_KEYWORD="%dw"
         INPUT_DIRECTIVE_KEYWORD="input"
         VAR_DIRECTIVE_KEYWORD="var"
+        PRIVATE_DIRECTIVE_KEYWORD="private"
         FUNCTION_DIRECTIVE_KEYWORD="fun"
         ANNOTATION_DIRECTIVE_KEYWORD="annotation"
         NAMESPACE_DIRECTIVE_KEYWORD="ns"
@@ -130,6 +131,7 @@ Directive
            | InputDirective
            | TypeDirective
            | ImportDirective
+           | PrivateFunctionDirective
            | FunctionDirective) {recoverWhile=HeaderRecover}
 
 AnnotationDirective ::= Annotation* 'annotation' AnnotationDefinition
@@ -147,7 +149,7 @@ AnnotationDefinition ::= Identifier '('( AnnotationParameter ( ',' AnnotationPar
 
 AnnotationParameter::= ((Identifier) ':' TypeLiteral) ('=' AnnotatedExpression)?
 
-private HeaderRecover::= !('---'|OUTPUT_DIRECTIVE_KEYWORD|'type'|'fun'|'ns'|'var'|'%dw'|'input'|IMPORT_DIRECTIVE_KEYWORD | '@' | 'annotation')
+private HeaderRecover::= !('---'|OUTPUT_DIRECTIVE_KEYWORD|'type'|'fun'|'ns'|'var'|'%dw'|'input'|IMPORT_DIRECTIVE_KEYWORD | '@' | 'annotation' | 'private')
 
 VersionDirective::= Annotation* '%dw'  DOUBLE_LITERAL {pin=2}
 
@@ -186,7 +188,17 @@ TypeDefinition::=Identifier TypeParameterDeclaration? '=' (TypeLiteral | Undefin
                       pin=1
                  }
 
-FunctionDirective::= Annotation*  'fun' FunctionDefinition {pin=2}
+PrivateFunctionDirective::= Annotation* 'private' 'fun' PrivateFunctionDefinition {pin=3}
+
+PrivateFunctionDefinition::=Identifier TypeParameterDeclaration? L_PARREN ( FunctionParameter ( ',' FunctionParameter )* )? (",")? R_PARREN ( ":" (Type | DynamicReturn)? "=" | "=")? AnnotatedExpression
+{
+     methods = [getName setName getNameIdentifier getPresentation getElementIcon]
+     implements="org.mule.tooling.lang.dw.parser.psi.WeaveNamedElement"
+     mixin="org.mule.tooling.lang.dw.parser.psi.WeaveNamedElementImpl"
+     pin=3
+}
+
+FunctionDirective::= Annotation* 'fun' FunctionDefinition {pin=3}
 
 FunctionDefinition::=Identifier TypeParameterDeclaration? L_PARREN ( FunctionParameter ( ',' FunctionParameter )* )? (",")? R_PARREN ( ":" (Type | DynamicReturn)? "=" | "=")? AnnotatedExpression
 {

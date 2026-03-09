@@ -125,6 +125,7 @@ CARET_SPACE="^"[\ \t\f\n]
   "=>"                        { return FAT_ARROW;}
 
   "%dw"                       { return VERSION_DIRECTIVE_KEYWORD;}
+  "private"                   { return PRIVATE_DIRECTIVE_KEYWORD;}
   "input"                    { return INPUT_DIRECTIVE_KEYWORD;}
   "output"                   { return OUTPUT_DIRECTIVE_KEYWORD;}
   "annotation"                   { return ANNOTATION_DIRECTIVE_KEYWORD;}

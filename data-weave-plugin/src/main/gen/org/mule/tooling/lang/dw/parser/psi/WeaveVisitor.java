@@ -442,6 +442,14 @@ public class WeaveVisitor extends PsiElementVisitor {
     visitExpression(o);
   }
 
+  public void visitPrivateFunctionDefinition(@NotNull WeavePrivateFunctionDefinition o) {
+    visitNamedElement(o);
+  }
+
+  public void visitPrivateFunctionDirective(@NotNull WeavePrivateFunctionDirective o) {
+    visitDirective(o);
+  }
+
   public void visitQualifiedName(@NotNull WeaveQualifiedName o) {
     visitPsiElement(o);
   }

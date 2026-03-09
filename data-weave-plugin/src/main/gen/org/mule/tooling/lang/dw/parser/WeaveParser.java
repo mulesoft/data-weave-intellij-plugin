@@ -38,8 +38,8 @@ public class WeaveParser implements PsiParser, LightPsiParser {
   public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
     create_token_set_(ATTRIBUTE, DYNAMIC_ATTRIBUTE, SIMPLE_ATTRIBUTE),
     create_token_set_(ANNOTATION_DIRECTIVE, DIRECTIVE, FUNCTION_DIRECTIVE, IMPORT_DIRECTIVE,
-      INPUT_DIRECTIVE, NAMESPACE_DIRECTIVE, OUTPUT_DIRECTIVE, TYPE_DIRECTIVE,
-      VARIABLE_DIRECTIVE, VERSION_DIRECTIVE),
+      INPUT_DIRECTIVE, NAMESPACE_DIRECTIVE, OUTPUT_DIRECTIVE, PRIVATE_FUNCTION_DIRECTIVE,
+      TYPE_DIRECTIVE, VARIABLE_DIRECTIVE, VERSION_DIRECTIVE),
     create_token_set_(ARRAY_DECONSTRUCT_PATTERN, DEFAULT_PATTERN, EMPTY_ARRAY_PATTERN, EMPTY_OBJECT_PATTERN,
       EXPRESSION_PATTERN, LITERAL_PATTERN, NAMED_LITERAL_PATTERN, NAMED_REGEX_PATTERN,
       NAMED_TYPE_PATTERN, OBJECT_DECONSTRUCT_PATTERN, PATTERN, REGEX_PATTERN,
@@ -920,6 +920,7 @@ public class WeaveParser implements PsiParser, LightPsiParser {
   //            | InputDirective
   //            | TypeDirective
   //            | ImportDirective
+  //            | PrivateFunctionDirective
   //            | FunctionDirective
   public static boolean Directive(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Directive")) return false;
@@ -933,6 +934,7 @@ public class WeaveParser implements PsiParser, LightPsiParser {
     if (!r) r = InputDirective(b, l + 1);
     if (!r) r = TypeDirective(b, l + 1);
     if (!r) r = ImportDirective(b, l + 1);
+    if (!r) r = PrivateFunctionDirective(b, l + 1);
     if (!r) r = FunctionDirective(b, l + 1);
     exit_section_(b, l, m, r, false, WeaveParser::HeaderRecover);
     return r;
@@ -1458,18 +1460,17 @@ public class WeaveParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Annotation*  'fun' FunctionDefinition
+  // Annotation* 'fun' FunctionDefinition
   public static boolean FunctionDirective(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FunctionDirective")) return false;
     if (!nextTokenIs(b, "<function directive>", AT, FUNCTION_DIRECTIVE_KEYWORD)) return false;
-    boolean r, p;
+    boolean r;
     Marker m = enter_section_(b, l, _NONE_, FUNCTION_DIRECTIVE, "<function directive>");
     r = FunctionDirective_0(b, l + 1);
     r = r && consumeToken(b, FUNCTION_DIRECTIVE_KEYWORD);
-    p = r; // pin = 2
     r = r && FunctionDefinition(b, l + 1);
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
+    exit_section_(b, l, m, r, false, null);
+    return r;
   }
 
   // Annotation*
@@ -1540,7 +1541,7 @@ public class WeaveParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // !('---'|OUTPUT_DIRECTIVE_KEYWORD|'type'|'fun'|'ns'|'var'|'%dw'|'input'|IMPORT_DIRECTIVE_KEYWORD | '@' | 'annotation')
+  // !('---'|OUTPUT_DIRECTIVE_KEYWORD|'type'|'fun'|'ns'|'var'|'%dw'|'input'|IMPORT_DIRECTIVE_KEYWORD | '@' | 'annotation' | 'private')
   static boolean HeaderRecover(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "HeaderRecover")) return false;
     boolean r;
@@ -1550,7 +1551,7 @@ public class WeaveParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // '---'|OUTPUT_DIRECTIVE_KEYWORD|'type'|'fun'|'ns'|'var'|'%dw'|'input'|IMPORT_DIRECTIVE_KEYWORD | '@' | 'annotation'
+  // '---'|OUTPUT_DIRECTIVE_KEYWORD|'type'|'fun'|'ns'|'var'|'%dw'|'input'|IMPORT_DIRECTIVE_KEYWORD | '@' | 'annotation' | 'private'
   private static boolean HeaderRecover_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "HeaderRecover_0")) return false;
     boolean r;
@@ -1565,6 +1566,7 @@ public class WeaveParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, IMPORT_DIRECTIVE_KEYWORD);
     if (!r) r = consumeToken(b, AT);
     if (!r) r = consumeToken(b, ANNOTATION_DIRECTIVE_KEYWORD);
+    if (!r) r = consumeToken(b, PRIVATE_DIRECTIVE_KEYWORD);
     return r;
   }
 
@@ -2874,6 +2876,151 @@ public class WeaveParser implements PsiParser, LightPsiParser {
     r = DefaultPattern(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
+  }
+
+  /* ********************************************************** */
+  // Identifier TypeParameterDeclaration? L_PARREN ( FunctionParameter ( ',' FunctionParameter )* )? (",")? R_PARREN ( ":" (Type | DynamicReturn)? "=" | "=")? AnnotatedExpression
+  public static boolean PrivateFunctionDefinition(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PrivateFunctionDefinition")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, PRIVATE_FUNCTION_DEFINITION, "<private function definition>");
+    r = Identifier(b, l + 1);
+    r = r && PrivateFunctionDefinition_1(b, l + 1);
+    r = r && consumeToken(b, L_PARREN);
+    p = r; // pin = 3
+    r = r && report_error_(b, PrivateFunctionDefinition_3(b, l + 1));
+    r = p && report_error_(b, PrivateFunctionDefinition_4(b, l + 1)) && r;
+    r = p && report_error_(b, consumeToken(b, R_PARREN)) && r;
+    r = p && report_error_(b, PrivateFunctionDefinition_6(b, l + 1)) && r;
+    r = p && AnnotatedExpression(b, l + 1) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // TypeParameterDeclaration?
+  private static boolean PrivateFunctionDefinition_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PrivateFunctionDefinition_1")) return false;
+    TypeParameterDeclaration(b, l + 1);
+    return true;
+  }
+
+  // ( FunctionParameter ( ',' FunctionParameter )* )?
+  private static boolean PrivateFunctionDefinition_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PrivateFunctionDefinition_3")) return false;
+    PrivateFunctionDefinition_3_0(b, l + 1);
+    return true;
+  }
+
+  // FunctionParameter ( ',' FunctionParameter )*
+  private static boolean PrivateFunctionDefinition_3_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PrivateFunctionDefinition_3_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = FunctionParameter(b, l + 1);
+    r = r && PrivateFunctionDefinition_3_0_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // ( ',' FunctionParameter )*
+  private static boolean PrivateFunctionDefinition_3_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PrivateFunctionDefinition_3_0_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!PrivateFunctionDefinition_3_0_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "PrivateFunctionDefinition_3_0_1", c)) break;
+    }
+    return true;
+  }
+
+  // ',' FunctionParameter
+  private static boolean PrivateFunctionDefinition_3_0_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PrivateFunctionDefinition_3_0_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COMMA);
+    r = r && FunctionParameter(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // (",")?
+  private static boolean PrivateFunctionDefinition_4(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PrivateFunctionDefinition_4")) return false;
+    consumeToken(b, COMMA);
+    return true;
+  }
+
+  // ( ":" (Type | DynamicReturn)? "=" | "=")?
+  private static boolean PrivateFunctionDefinition_6(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PrivateFunctionDefinition_6")) return false;
+    PrivateFunctionDefinition_6_0(b, l + 1);
+    return true;
+  }
+
+  // ":" (Type | DynamicReturn)? "=" | "="
+  private static boolean PrivateFunctionDefinition_6_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PrivateFunctionDefinition_6_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = PrivateFunctionDefinition_6_0_0(b, l + 1);
+    if (!r) r = consumeToken(b, EQ);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // ":" (Type | DynamicReturn)? "="
+  private static boolean PrivateFunctionDefinition_6_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PrivateFunctionDefinition_6_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COLON);
+    r = r && PrivateFunctionDefinition_6_0_0_1(b, l + 1);
+    r = r && consumeToken(b, EQ);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // (Type | DynamicReturn)?
+  private static boolean PrivateFunctionDefinition_6_0_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PrivateFunctionDefinition_6_0_0_1")) return false;
+    PrivateFunctionDefinition_6_0_0_1_0(b, l + 1);
+    return true;
+  }
+
+  // Type | DynamicReturn
+  private static boolean PrivateFunctionDefinition_6_0_0_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PrivateFunctionDefinition_6_0_0_1_0")) return false;
+    boolean r;
+    r = Type(b, l + 1);
+    if (!r) r = DynamicReturn(b, l + 1);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // Annotation* 'private' 'fun' PrivateFunctionDefinition
+  public static boolean PrivateFunctionDirective(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PrivateFunctionDirective")) return false;
+    if (!nextTokenIs(b, "<private function directive>", AT, PRIVATE_DIRECTIVE_KEYWORD)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, PRIVATE_FUNCTION_DIRECTIVE, "<private function directive>");
+    r = PrivateFunctionDirective_0(b, l + 1);
+    r = r && consumeTokens(b, 2, PRIVATE_DIRECTIVE_KEYWORD, FUNCTION_DIRECTIVE_KEYWORD);
+    p = r; // pin = 3
+    r = r && PrivateFunctionDefinition(b, l + 1);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // Annotation*
+  private static boolean PrivateFunctionDirective_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PrivateFunctionDirective_0")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!Annotation(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "PrivateFunctionDirective_0", c)) break;
+    }
+    return true;
   }
 
   /* ********************************************************** */

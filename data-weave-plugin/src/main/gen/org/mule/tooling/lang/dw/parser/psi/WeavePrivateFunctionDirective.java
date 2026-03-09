@@ -5,12 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface WeaveFunctionDirective extends WeaveDirective {
+public interface WeavePrivateFunctionDirective extends WeaveDirective {
 
   @NotNull
   List<WeaveAnnotation> getAnnotationList();
 
-  @NotNull
-  WeaveFunctionDefinition getFunctionDefinition();
+  @Nullable
+  WeavePrivateFunctionDefinition getPrivateFunctionDefinition();
 
 }
