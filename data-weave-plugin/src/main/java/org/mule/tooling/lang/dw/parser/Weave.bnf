@@ -188,7 +188,7 @@ TypeDefinition::=Identifier TypeParameterDeclaration? '=' (TypeLiteral | Undefin
                       pin=1
                  }
 
-PrivateFunctionDirective::= Annotation* 'private' 'fun' PrivateFunctionDefinition {pin=3}
+PrivateFunctionDirective::= Annotation* 'private' 'fun' PrivateFunctionDefinition {pin=4}
 
 PrivateFunctionDefinition::=Identifier TypeParameterDeclaration? L_PARREN ( FunctionParameter ( ',' FunctionParameter )* )? (",")? R_PARREN ( ":" (Type | DynamicReturn)? "=" | "=")? AnnotatedExpression
 {

@@ -34,9 +34,9 @@ public class WeavePrivateFunctionDirectiveImpl extends WeaveDirectiveImpl implem
   }
 
   @Override
-  @Nullable
+  @NotNull
   public WeavePrivateFunctionDefinition getPrivateFunctionDefinition() {
-    return findChildByClass(WeavePrivateFunctionDefinition.class);
+    return findNotNullChildByClass(WeavePrivateFunctionDefinition.class);
   }
 
 }

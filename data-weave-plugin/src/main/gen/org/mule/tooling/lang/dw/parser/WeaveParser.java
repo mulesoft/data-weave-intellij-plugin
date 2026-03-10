@@ -3002,14 +3002,13 @@ public class WeaveParser implements PsiParser, LightPsiParser {
   public static boolean PrivateFunctionDirective(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "PrivateFunctionDirective")) return false;
     if (!nextTokenIs(b, "<private function directive>", AT, PRIVATE_DIRECTIVE_KEYWORD)) return false;
-    boolean r, p;
+    boolean r;
     Marker m = enter_section_(b, l, _NONE_, PRIVATE_FUNCTION_DIRECTIVE, "<private function directive>");
     r = PrivateFunctionDirective_0(b, l + 1);
-    r = r && consumeTokens(b, 2, PRIVATE_DIRECTIVE_KEYWORD, FUNCTION_DIRECTIVE_KEYWORD);
-    p = r; // pin = 3
+    r = r && consumeTokens(b, 0, PRIVATE_DIRECTIVE_KEYWORD, FUNCTION_DIRECTIVE_KEYWORD);
     r = r && PrivateFunctionDefinition(b, l + 1);
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
+    exit_section_(b, l, m, r, false, null);
+    return r;
   }
 
   // Annotation*
