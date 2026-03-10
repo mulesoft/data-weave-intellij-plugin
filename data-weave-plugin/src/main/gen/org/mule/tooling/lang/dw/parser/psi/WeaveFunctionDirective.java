@@ -10,7 +10,7 @@ public interface WeaveFunctionDirective extends WeaveDirective {
   @NotNull
   List<WeaveAnnotation> getAnnotationList();
 
-  @NotNull
+  @Nullable
   WeaveFunctionDefinition getFunctionDefinition();
 
 }

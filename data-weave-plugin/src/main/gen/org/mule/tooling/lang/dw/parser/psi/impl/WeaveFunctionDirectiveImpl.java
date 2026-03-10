@@ -34,9 +34,9 @@ public class WeaveFunctionDirectiveImpl extends WeaveDirectiveImpl implements We
   }
 
   @Override
-  @NotNull
+  @Nullable
   public WeaveFunctionDefinition getFunctionDefinition() {
-    return findNotNullChildByClass(WeaveFunctionDefinition.class);
+    return findChildByClass(WeaveFunctionDefinition.class);
   }
 
 }

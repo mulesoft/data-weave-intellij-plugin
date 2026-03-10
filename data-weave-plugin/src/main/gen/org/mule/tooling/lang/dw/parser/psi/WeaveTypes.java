@@ -116,8 +116,6 @@ public interface WeaveTypes {
   IElementType OUTPUT_DIRECTIVE = new WeaveElementType("OUTPUT_DIRECTIVE");
   IElementType PATTERN = new WeaveElementType("PATTERN");
   IElementType PATTERN_MATCHER_EXPRESSION = new WeaveElementType("PATTERN_MATCHER_EXPRESSION");
-  IElementType PRIVATE_FUNCTION_DEFINITION = new WeaveElementType("PRIVATE_FUNCTION_DEFINITION");
-  IElementType PRIVATE_FUNCTION_DIRECTIVE = new WeaveElementType("PRIVATE_FUNCTION_DIRECTIVE");
   IElementType QUALIFIED_NAME = new WeaveElementType("QUALIFIED_NAME");
   IElementType REFERENCE_TYPE = new WeaveElementType("REFERENCE_TYPE");
   IElementType REGEX_LITERAL = new WeaveElementType("REGEX_LITERAL");
@@ -544,12 +542,6 @@ public interface WeaveTypes {
       }
       else if (type == PATTERN_MATCHER_EXPRESSION) {
         return new WeavePatternMatcherExpressionImpl(node);
-      }
-      else if (type == PRIVATE_FUNCTION_DEFINITION) {
-        return new WeavePrivateFunctionDefinitionImpl(node);
-      }
-      else if (type == PRIVATE_FUNCTION_DIRECTIVE) {
-        return new WeavePrivateFunctionDirectiveImpl(node);
       }
       else if (type == QUALIFIED_NAME) {
         return new WeaveQualifiedNameImpl(node);

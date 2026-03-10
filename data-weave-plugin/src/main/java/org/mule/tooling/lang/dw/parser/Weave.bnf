@@ -131,7 +131,6 @@ Directive
            | InputDirective
            | TypeDirective
            | ImportDirective
-           | PrivateFunctionDirective
            | FunctionDirective) {recoverWhile=HeaderRecover}
 
 AnnotationDirective ::= Annotation* 'annotation' AnnotationDefinition
@@ -188,17 +187,7 @@ TypeDefinition::=Identifier TypeParameterDeclaration? '=' (TypeLiteral | Undefin
                       pin=1
                  }
 
-PrivateFunctionDirective::= Annotation* 'private' 'fun' PrivateFunctionDefinition {pin=3}
-
-PrivateFunctionDefinition::=Identifier TypeParameterDeclaration? L_PARREN ( FunctionParameter ( ',' FunctionParameter )* )? (",")? R_PARREN ( ":" (Type | DynamicReturn)? "=" | "=")? AnnotatedExpression
-{
-     methods = [getName setName getNameIdentifier getPresentation getElementIcon]
-     implements="org.mule.tooling.lang.dw.parser.psi.WeaveNamedElement"
-     mixin="org.mule.tooling.lang.dw.parser.psi.WeaveNamedElementImpl"
-     pin=3
-}
-
-FunctionDirective::= Annotation* 'fun' FunctionDefinition {pin=3}
+FunctionDirective::= Annotation* 'private'? 'fun' FunctionDefinition {pin=3}
 
 FunctionDefinition::=Identifier TypeParameterDeclaration? L_PARREN ( FunctionParameter ( ',' FunctionParameter )* )? (",")? R_PARREN ( ":" (Type | DynamicReturn)? "=" | "=")? AnnotatedExpression
 {
