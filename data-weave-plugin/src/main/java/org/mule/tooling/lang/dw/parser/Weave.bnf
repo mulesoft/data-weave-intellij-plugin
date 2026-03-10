@@ -163,7 +163,7 @@ ImportedElement::= Identifier ('as' ImportedElementAlias)? {
 
 ImportedElementAlias::=Identifier
 
-NamespaceDirective::= Annotation* 'ns' NamespaceDefinition {pin=2}
+NamespaceDirective::= Annotation* 'private'? 'ns' NamespaceDefinition {pin=3}
 
 NamespaceDefinition::=Identifier NAMESPACE_URI
   {
@@ -173,11 +173,11 @@ NamespaceDefinition::=Identifier NAMESPACE_URI
       pin=1
  }
 
-VariableDirective::= Annotation* 'var' VariableDefinition {pin=2}
+VariableDirective::= Annotation* 'private'? 'var' VariableDefinition {pin=3}
 
 OutputDirective::= Annotation* OUTPUT_DIRECTIVE_KEYWORD (":" Type)? ((DataFormat ('with' Identifier)?) | Identifier) Options? {pin=2}
 
-TypeDirective::= Annotation* 'type' TypeDefinition {pin=2}
+TypeDirective::= Annotation* 'private'? 'type' TypeDefinition {pin=3}
 
 TypeDefinition::=Identifier TypeParameterDeclaration? '=' (TypeLiteral | UndefinedLiteral)
                  {

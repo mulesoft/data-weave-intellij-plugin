@@ -1,10 +1,27 @@
 %dw 2.0
 output application/json
 
-private fun a() = "a"
+private ns ns0 http://dataweave.com
 
-private fun hi(name: String): String = "Hi " ++ name
+private type User = {
+  name: String,
+  lastName: String
+}
+
+private var HI = "Hi"
+
+private fun hi(user: User): String = do {
+  private var SEPARATOR = " "
+  ---
+  HI ++ SEPARATOR ++ user.lastName ++ SEPARATOR ++ user.name
+}
+
 ---
 {
-  key: hi("Mariano")
+  hi: HI,
+  user: hi({
+    name: "John",
+    lastName: "Doe"
+  }),
+  ns0#number: 123
 }
