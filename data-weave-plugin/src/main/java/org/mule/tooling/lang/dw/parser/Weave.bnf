@@ -76,7 +76,7 @@
         VERSION_DIRECTIVE_KEYWORD="%dw"
         INPUT_DIRECTIVE_KEYWORD="input"
         VAR_DIRECTIVE_KEYWORD="var"
-        PRIVATE_DIRECTIVE_KEYWORD="private"
+        PRIVATE_KEYWORD="private"
         FUNCTION_DIRECTIVE_KEYWORD="fun"
         ANNOTATION_DIRECTIVE_KEYWORD="annotation"
         NAMESPACE_DIRECTIVE_KEYWORD="ns"
@@ -188,7 +188,7 @@ TypeDefinition::=Identifier TypeParameterDeclaration? '=' (TypeLiteral | Undefin
                       pin=1
                  }
 
-PrivateFunctionDirective::= Annotation* 'private' 'fun' PrivateFunctionDefinition {pin=4}
+PrivateFunctionDirective::= Annotation* 'private' 'fun' PrivateFunctionDefinition {pin=3}
 
 PrivateFunctionDefinition::=Identifier TypeParameterDeclaration? L_PARREN ( FunctionParameter ( ',' FunctionParameter )* )? (",")? R_PARREN ( ":" (Type | DynamicReturn)? "=" | "=")? AnnotatedExpression
 {

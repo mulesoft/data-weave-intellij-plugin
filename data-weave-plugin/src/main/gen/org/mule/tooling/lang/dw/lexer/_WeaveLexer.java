@@ -1490,7 +1490,7 @@ public class _WeaveLexer implements FlexLexer {
           // fall through
           case 176: break;
           case 88:
-            { return PRIVATE_DIRECTIVE_KEYWORD;
+            { return PRIVATE_KEYWORD;
             }
           // fall through
           case 177: break;

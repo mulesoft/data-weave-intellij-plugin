@@ -1566,7 +1566,7 @@ public class WeaveParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, IMPORT_DIRECTIVE_KEYWORD);
     if (!r) r = consumeToken(b, AT);
     if (!r) r = consumeToken(b, ANNOTATION_DIRECTIVE_KEYWORD);
-    if (!r) r = consumeToken(b, PRIVATE_DIRECTIVE_KEYWORD);
+    if (!r) r = consumeToken(b, PRIVATE_KEYWORD);
     return r;
   }
 
@@ -3001,14 +3001,15 @@ public class WeaveParser implements PsiParser, LightPsiParser {
   // Annotation* 'private' 'fun' PrivateFunctionDefinition
   public static boolean PrivateFunctionDirective(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "PrivateFunctionDirective")) return false;
-    if (!nextTokenIs(b, "<private function directive>", AT, PRIVATE_DIRECTIVE_KEYWORD)) return false;
-    boolean r;
+    if (!nextTokenIs(b, "<private function directive>", AT, PRIVATE_KEYWORD)) return false;
+    boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, PRIVATE_FUNCTION_DIRECTIVE, "<private function directive>");
     r = PrivateFunctionDirective_0(b, l + 1);
-    r = r && consumeTokens(b, 0, PRIVATE_DIRECTIVE_KEYWORD, FUNCTION_DIRECTIVE_KEYWORD);
+    r = r && consumeTokens(b, 2, PRIVATE_KEYWORD, FUNCTION_DIRECTIVE_KEYWORD);
+    p = r; // pin = 3
     r = r && PrivateFunctionDefinition(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
-    return r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // Annotation*

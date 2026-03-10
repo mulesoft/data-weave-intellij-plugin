@@ -35,12 +35,18 @@ public class WeavePsiUtils {
             WeaveTypes.MATCH_KEYWORD,
             WeaveTypes.UPDATE_KEYWORD,
             WeaveTypes.AT_KEYWORD,
-            WeaveTypes.DO_KEYWORD
-    );
+            WeaveTypes.DO_KEYWORD,
+            WeaveTypes.PRIVATE_KEYWORD);
 
-    public static List<IElementType> DirectivesToken =
-            Arrays.asList(WeaveTypes.INPUT_DIRECTIVE_KEYWORD, WeaveTypes.OUTPUT_DIRECTIVE_KEYWORD, WeaveTypes.NAMESPACE_DIRECTIVE_KEYWORD, WeaveTypes.TYPE_DIRECTIVE_KEYWORD
-                    , WeaveTypes.VAR_DIRECTIVE_KEYWORD, WeaveTypes.VERSION_DIRECTIVE_KEYWORD, WeaveTypes.FUNCTION_DIRECTIVE_KEYWORD, WeaveTypes.IMPORT_DIRECTIVE_KEYWORD, WeaveTypes.ANNOTATION_DIRECTIVE_KEYWORD);
+    public static List<IElementType> DirectivesToken = Arrays.asList(WeaveTypes.INPUT_DIRECTIVE_KEYWORD,
+            WeaveTypes.OUTPUT_DIRECTIVE_KEYWORD,
+            WeaveTypes.NAMESPACE_DIRECTIVE_KEYWORD,
+            WeaveTypes.TYPE_DIRECTIVE_KEYWORD,
+            WeaveTypes.VAR_DIRECTIVE_KEYWORD,
+            WeaveTypes.VERSION_DIRECTIVE_KEYWORD,
+            WeaveTypes.FUNCTION_DIRECTIVE_KEYWORD,
+            WeaveTypes.IMPORT_DIRECTIVE_KEYWORD,
+            WeaveTypes.ANNOTATION_DIRECTIVE_KEYWORD);
 
     @NotNull
     public static String stripQuotes(@NotNull String text) {
