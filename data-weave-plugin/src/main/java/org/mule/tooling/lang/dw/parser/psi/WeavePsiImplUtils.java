@@ -53,6 +53,9 @@ public class WeavePsiImplUtils {
         return PsiTreeUtil.findChildOfType(weaveDocument.getHeader(), WeaveOutputDirective.class);
     }
 
+    public static boolean isPrivate(WeaveDirective directive) {
+        return directive.getNode().findChildByType(WeaveTypes.PRIVATE_KEYWORD) != null;
+    }
 
     public static Icon getElementIcon(WeaveFunctionDefinition functionDefinition, final int flags) {
         return PlatformIcons.FUNCTION_ICON;

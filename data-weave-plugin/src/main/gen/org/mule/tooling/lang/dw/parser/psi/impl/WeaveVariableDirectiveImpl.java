@@ -39,4 +39,9 @@ public class WeaveVariableDirectiveImpl extends WeaveDirectiveImpl implements We
     return findChildByClass(WeaveVariableDefinition.class);
   }
 
+  @Override
+  public boolean isPrivate() {
+    return WeavePsiImplUtils.isPrivate(this);
+  }
+
 }

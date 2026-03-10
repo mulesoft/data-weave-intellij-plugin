@@ -13,4 +13,6 @@ public interface WeaveNamespaceDirective extends WeaveDirective {
   @Nullable
   WeaveNamespaceDefinition getNamespaceDefinition();
 
+  boolean isPrivate();
+
 }

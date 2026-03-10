@@ -40,33 +40,33 @@ public class WeaveGlobalDefinitionsIndexer extends FileBasedIndexExtension<Strin
                 String qualifiedName = nameIdentifier1.fullQualifiedName();
                 PsiElement[] children = weaveDocument.getHeader().getChildren();
                 for (PsiElement child : children) {
-                    if (child instanceof WeaveFunctionDirective) {
-                        WeaveFunctionDefinition functionDefinition = ((WeaveFunctionDirective) child).getFunctionDefinition();
+                    if (child instanceof WeaveFunctionDirective directive) {
+                        WeaveFunctionDefinition functionDefinition = directive.getFunctionDefinition();
                         if (functionDefinition != null) {
                             String fqn = functionDefinition.getName();
                             List<GlobalElementIdentifier> weaveIdentifiers = result.computeIfAbsent(fqn, k -> new ArrayList<>());
                             PsiElement nameIdentifier = functionDefinition.getNameIdentifier();
                             if (nameIdentifier != null) {
                                 TextRange textRange = nameIdentifier.getTextRange();
-                                // TODO: [ML] - Check if the function is public or private
+                                int scope =  directive.isPrivate() ? IdentifierScope.PRIVATE() : IdentifierScope.PUBLIC();
                                 weaveIdentifiers.add(new GlobalElementIdentifier(textRange.getStartOffset(),
                                         textRange.getEndOffset(),
                                         functionDefinition.getName(),
                                         IdentifierKind.DEFINITION(),
                                         IdentifierType.FUNCTION(),
                                         qualifiedName,
-                                        IdentifierScope.PUBLIC()
+                                        scope
                                 ));
                             }
                         }
-                    } else if (child instanceof WeaveVariableDirective) {
-                        WeaveVariableDefinition variableDefinition = ((WeaveVariableDirective) child).getVariableDefinition();
+                    } else if (child instanceof WeaveVariableDirective directive) {
+                        WeaveVariableDefinition variableDefinition = directive.getVariableDefinition();
                         if (variableDefinition != null) {
                             String fqn = variableDefinition.getName();
                             List<GlobalElementIdentifier> weaveIdentifiers = result.computeIfAbsent(fqn, k -> new ArrayList<>());
                             PsiElement nameIdentifier = variableDefinition.getNameIdentifier();
                             if (nameIdentifier != null) {
-                                // TODO: [ML] - Check if the function is public or private
+                                int scope =  directive.isPrivate() ? IdentifierScope.PRIVATE() : IdentifierScope.PUBLIC();
                                 TextRange textRange = nameIdentifier.getTextRange();
                                 weaveIdentifiers.add(new GlobalElementIdentifier(textRange.getStartOffset(),
                                         textRange.getEndOffset(),
@@ -74,18 +74,18 @@ public class WeaveGlobalDefinitionsIndexer extends FileBasedIndexExtension<Strin
                                         IdentifierKind.DEFINITION(),
                                         IdentifierType.VARIABLE(),
                                         qualifiedName,
-                                        IdentifierScope.PUBLIC()
+                                        scope
                                 ));
                             }
                         }
-                    } else if (child instanceof WeaveTypeDirective) {
-                        WeaveTypeDefinition typeDefinition = ((WeaveTypeDirective) child).getTypeDefinition();
+                    } else if (child instanceof WeaveTypeDirective directive) {
+                        WeaveTypeDefinition typeDefinition = directive.getTypeDefinition();
                         if (typeDefinition != null) {
                             String fqn = typeDefinition.getName();
                             List<GlobalElementIdentifier> weaveIdentifiers = result.computeIfAbsent(fqn, k -> new ArrayList<>());
                             PsiElement nameIdentifier = typeDefinition.getNameIdentifier();
                             if (nameIdentifier != null) {
-                                // TODO: [ML] - Check if the function is public or private
+                                int scope =  directive.isPrivate() ? IdentifierScope.PRIVATE() : IdentifierScope.PUBLIC();
                                 TextRange textRange = nameIdentifier.getTextRange();
                                 weaveIdentifiers.add(new GlobalElementIdentifier(textRange.getStartOffset(),
                                         textRange.getEndOffset(),
@@ -93,7 +93,7 @@ public class WeaveGlobalDefinitionsIndexer extends FileBasedIndexExtension<Strin
                                         IdentifierKind.DEFINITION(),
                                         IdentifierType.VARIABLE(),
                                         qualifiedName,
-                                        IdentifierScope.PUBLIC()
+                                        scope
                                 ));
                             }
                         }

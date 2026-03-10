@@ -39,4 +39,9 @@ public class WeaveNamespaceDirectiveImpl extends WeaveDirectiveImpl implements W
     return findChildByClass(WeaveNamespaceDefinition.class);
   }
 
+  @Override
+  public boolean isPrivate() {
+    return WeavePsiImplUtils.isPrivate(this);
+  }
+
 }
