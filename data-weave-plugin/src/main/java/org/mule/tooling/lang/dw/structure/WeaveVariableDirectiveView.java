@@ -1,9 +1,9 @@
 package org.mule.tooling.lang.dw.structure;
 
-
-import com.intellij.icons.AllIcons;
 import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.structureView.impl.common.PsiTreeElementBase;
+import com.intellij.ui.RowIcon;
+import com.intellij.util.PlatformIcons;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.mule.tooling.lang.dw.parser.psi.WeaveVariableDirective;
@@ -31,6 +31,12 @@ public class WeaveVariableDirectiveView extends PsiTreeElementBase<WeaveVariable
 
   @Override
   public Icon getIcon(boolean open) {
-    return AllIcons.Nodes.Variable;
+    if (getElement() != null && getElement().isPrivate())  {
+      RowIcon icon = new RowIcon(2);
+      icon.setIcon(PlatformIcons.VARIABLE_ICON, 0);
+      icon.setIcon(PlatformIcons.PRIVATE_ICON, 1);
+      return icon;
+    }
+    return PlatformIcons.VARIABLE_ICON;
   }
 }

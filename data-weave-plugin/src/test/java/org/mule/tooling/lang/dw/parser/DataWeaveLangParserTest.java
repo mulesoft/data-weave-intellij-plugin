@@ -20,6 +20,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RunWith(Parameterized.class)
@@ -68,7 +69,8 @@ public class DataWeaveLangParserTest extends ParsingTestCase {
                 assertEquals("psi text mismatch", text, myFile.getText());
                 ensureCorrectReparse(myFile);
                 List<PsiErrorElement> errors = getErrors(myFile);
-//                System.out.println(toParseTreeText(myFile, true, true));
+                System.out.println(errors.stream().map(e -> e.getErrorDescription()).collect(Collectors.joining("\n")));
+                System.out.println(toParseTreeText(myFile, true, true));
                 assertEmpty(name + " has errors \n" + toParseTreeText(myFile, true, true), errors);
             } catch (Exception e) {
                 fail(e.getMessage());

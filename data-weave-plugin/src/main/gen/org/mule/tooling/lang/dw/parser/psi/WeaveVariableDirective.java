@@ -13,4 +13,6 @@ public interface WeaveVariableDirective extends WeaveDirective {
   @Nullable
   WeaveVariableDefinition getVariableDefinition();
 
+  boolean isPrivate();
+
 }

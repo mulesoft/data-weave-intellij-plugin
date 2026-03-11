@@ -5,6 +5,7 @@ import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.ui.RowIcon;
 import com.intellij.util.PlatformIcons;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -53,20 +54,47 @@ public class WeavePsiImplUtils {
         return PsiTreeUtil.findChildOfType(weaveDocument.getHeader(), WeaveOutputDirective.class);
     }
 
+    public static boolean isPrivate(WeaveDirective directive) {
+        return directive.getNode().findChildByType(WeaveTypes.PRIVATE_KEYWORD) != null;
+    }
 
     public static Icon getElementIcon(WeaveFunctionDefinition functionDefinition, final int flags) {
+        if (functionDefinition.getParent() instanceof WeaveFunctionDirective directive) {
+            if (directive.isPrivate()) {
+                RowIcon icon = new RowIcon(2);
+                icon.setIcon(PlatformIcons.FUNCTION_ICON, 0);
+                icon.setIcon(PlatformIcons.PRIVATE_ICON, 1);
+                return icon;
+            }
+        }
         return PlatformIcons.FUNCTION_ICON;
     }
 
-    public static Icon getElementIcon(WeaveVariableDefinition functionDefinition, final int flags) {
+    public static Icon getElementIcon(WeaveVariableDefinition variableDefinition, final int flags) {
+        if (variableDefinition.getParent() instanceof WeaveVariableDirective directive) {
+            if (directive.isPrivate()) {
+                RowIcon icon = new RowIcon(2);
+                icon.setIcon(PlatformIcons.VARIABLE_ICON, 0);
+                icon.setIcon(PlatformIcons.PRIVATE_ICON, 1);
+                return icon;
+            }
+        }
         return PlatformIcons.VARIABLE_ICON;
     }
 
-    public static Icon getElementIcon(WeaveTypeDefinition functionDefinition, final int flags) {
+    public static Icon getElementIcon(WeaveTypeDefinition typeDefinition, final int flags) {
+        if (typeDefinition.getParent() instanceof WeaveTypeDirective directive) {
+            if (directive.isPrivate()) {
+                RowIcon icon = new RowIcon(2);
+                icon.setIcon(PlatformIcons.CLASS_ICON, 0);
+                icon.setIcon(PlatformIcons.PRIVATE_ICON, 1);
+                return icon;
+            }
+        }
         return PlatformIcons.CLASS_ICON;
     }
 
-    public static Icon getElementIcon(WeaveAnnotationDefinition functionDefinition, final int flags) {
+    public static Icon getElementIcon(WeaveAnnotationDefinition annotationDefinition, final int flags) {
         return PlatformIcons.ANNOTATION_TYPE_ICON;
     }
 
@@ -85,6 +113,14 @@ public class WeavePsiImplUtils {
 
             @Override
             public Icon getIcon(boolean b) {
+                if (functionDefinition.getParent() instanceof WeaveFunctionDirective directive) {
+                    if (directive.isPrivate()) {
+                        RowIcon icon = new RowIcon(2);
+                        icon.setIcon(PlatformIcons.FUNCTION_ICON, 0);
+                        icon.setIcon(PlatformIcons.PRIVATE_ICON, 1);
+                        return icon;
+                    }
+                }
                 return PlatformIcons.FUNCTION_ICON;
             }
         };

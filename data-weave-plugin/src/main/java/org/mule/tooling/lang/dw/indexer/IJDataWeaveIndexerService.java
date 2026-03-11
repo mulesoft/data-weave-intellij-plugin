@@ -1,7 +1,6 @@
 package org.mule.tooling.lang.dw.indexer;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.FileTypeIndex;
@@ -19,24 +18,27 @@ import java.util.Iterator;
 import java.util.List;
 
 public class IJDataWeaveIndexerService implements WeaveIndexService {
-    private Project project;
+    private final Project project;
 
     public IJDataWeaveIndexerService(Project project) {
         this.project = project;
     }
 
     @Override
-    public LocatedResult[] searchDefinitions(String name) {
+    public LocatedResult[] searchDefinitions(String name, int scope) {
         final List<List<WeaveGlobalDefinitionsIndexer.GlobalElementIdentifier>> values =
                 FileBasedIndex.getInstance()
                         .getValues(WeaveGlobalDefinitionsIndexer.INDEX_ID, name, GlobalSearchScope.allScope(project));
-        return values.stream().flatMap((l) -> {
-            return l.stream().map((gi) -> {
-                final WeaveIdentifier weaveIdentifier = new WeaveIdentifier(gi.startLocation(), gi.endLocation(), gi.value(), gi.idType(), gi.kind());
-                final NameIdentifier nameIdentifier = NameIdentifier.apply(gi.moduleName(), Option.empty());
-                return new LocatedResult<>(nameIdentifier, weaveIdentifier);
-            });
-        }).toArray(LocatedResult[]::new);
+        return values.stream()
+                .flatMap((l) -> l.stream()
+                        .filter(gi -> gi.scope() == scope)
+                        .map((gi) -> {
+                            final WeaveIdentifier weaveIdentifier = new WeaveIdentifier(gi.startLocation(), gi.endLocation(),
+                                    gi.value(), gi.idType(), gi.kind(), gi.scope());
+                            final NameIdentifier nameIdentifier = NameIdentifier.apply(gi.moduleName(), Option.empty());
+                            return new LocatedResult<>(nameIdentifier, weaveIdentifier);
+                        })
+                ).toArray(LocatedResult[]::new);
     }
 
     @Override
@@ -55,7 +57,7 @@ public class IJDataWeaveIndexerService implements WeaveIndexService {
                     org.mule.tooling.lang.dw.parser.psi.WeaveDocument weaveDocument = PsiTreeUtil.getChildOfType(file, org.mule.tooling.lang.dw.parser.psi.WeaveDocument.class);
                     if (weaveDocument != null) {
                         int documentKind = weaveDocument.isMappingDocument() ? DocumentKind.MAPPING() : DocumentKind.MODULE();
-                        fileList.add(new LocatedResult<WeaveDocument>(nameIdentifier, new WeaveDocument("", documentKind)));
+                        fileList.add(new LocatedResult<>(nameIdentifier, new WeaveDocument("", documentKind)));
                     }
                 }
             }

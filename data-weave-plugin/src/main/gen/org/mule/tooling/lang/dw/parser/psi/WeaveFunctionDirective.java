@@ -13,4 +13,6 @@ public interface WeaveFunctionDirective extends WeaveDirective {
   @Nullable
   WeaveFunctionDefinition getFunctionDefinition();
 
+  boolean isPrivate();
+
 }
