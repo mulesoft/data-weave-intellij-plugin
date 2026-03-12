@@ -22,6 +22,6 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build --stacktrace
     - name: Deploy to Jetbrain
-      run:  ./gradlew data-weave-plugin:build --stacktrace --info
+      run: ./gradlew data-weave-plugin:build --stacktrace --info
       env:
         IJ_TOKEN: ${{secrets.IJ_TOKEN}}
