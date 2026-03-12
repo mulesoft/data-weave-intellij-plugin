@@ -21,7 +21,7 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew build --stacktrace
-    - name: Deploy to Jetbrain
+    - name: Deploy to Jetbrains
       run: ./gradlew data-weave-plugin:build --stacktrace --info
       env:
         IJ_TOKEN: ${{secrets.IJ_TOKEN}}
