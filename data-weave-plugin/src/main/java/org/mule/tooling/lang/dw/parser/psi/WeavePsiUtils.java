@@ -36,7 +36,8 @@ public class WeavePsiUtils {
             WeaveTypes.UPDATE_KEYWORD,
             WeaveTypes.AT_KEYWORD,
             WeaveTypes.DO_KEYWORD,
-            WeaveTypes.PRIVATE_KEYWORD);
+            WeaveTypes.PRIVATE_KEYWORD,
+            WeaveTypes.INTERNAL_KEYWORD);
 
     public static List<IElementType> DirectivesToken = Arrays.asList(WeaveTypes.INPUT_DIRECTIVE_KEYWORD,
             WeaveTypes.OUTPUT_DIRECTIVE_KEYWORD,

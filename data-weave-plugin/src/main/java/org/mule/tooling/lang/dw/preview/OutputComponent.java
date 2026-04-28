@@ -64,6 +64,7 @@ public class OutputComponent implements Disposable {
     }
 
     public JComponent createComponent(Project project, PreviewToolWindowFactory.NameChanger nameChanger) {
+        disposeOutputEditorIfExists();
         this.myProject = project;
         this.nameChanger = nameChanger;
         this.showDiffAction = new ShowDiffAction();
@@ -185,6 +186,7 @@ public class OutputComponent implements Disposable {
 
     public void onPreviewResultFailed() {
         this.content.setDisplayName("Output \u274C - At: " + getCurrentTime() + "");
+        setDocumentContent("");
     }
 
     public void close() {

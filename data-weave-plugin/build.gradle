@@ -34,6 +34,10 @@ intellij {
     updateSinceUntilBuild = false
 }
 
+tasks.named('runIde') {
+    jvmArgs '-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005'
+}
+
 task downloadAgentServerDependencies(type: Copy) {
     from configurations.agentServerLibs
     into "$projectDir/src/main/resources/agent-server-libs"

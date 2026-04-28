@@ -1458,15 +1458,16 @@ public class WeaveParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Annotation* 'private'? 'fun' FunctionDefinition
+  // Annotation* 'private'? 'internal'? 'fun' FunctionDefinition
   public static boolean FunctionDirective(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FunctionDirective")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, FUNCTION_DIRECTIVE, "<function directive>");
     r = FunctionDirective_0(b, l + 1);
     r = r && FunctionDirective_1(b, l + 1);
+    r = r && FunctionDirective_2(b, l + 1);
     r = r && consumeToken(b, FUNCTION_DIRECTIVE_KEYWORD);
-    p = r; // pin = 3
+    p = r; // pin = 4
     r = r && FunctionDefinition(b, l + 1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
@@ -1487,6 +1488,13 @@ public class WeaveParser implements PsiParser, LightPsiParser {
   private static boolean FunctionDirective_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FunctionDirective_1")) return false;
     consumeToken(b, PRIVATE_KEYWORD);
+    return true;
+  }
+
+  // 'internal'?
+  private static boolean FunctionDirective_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "FunctionDirective_2")) return false;
+    consumeToken(b, INTERNAL_KEYWORD);
     return true;
   }
 
@@ -1547,7 +1555,7 @@ public class WeaveParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // !('---'|OUTPUT_DIRECTIVE_KEYWORD|'type'|'fun'|'ns'|'var'|'%dw'|'input'|IMPORT_DIRECTIVE_KEYWORD | '@' | 'annotation' | 'private')
+  // !('---'|OUTPUT_DIRECTIVE_KEYWORD|'type'|'fun'|'ns'|'var'|'%dw'|'input'|IMPORT_DIRECTIVE_KEYWORD | '@' | 'annotation' | 'private' | 'internal')
   static boolean HeaderRecover(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "HeaderRecover")) return false;
     boolean r;
@@ -1557,7 +1565,7 @@ public class WeaveParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // '---'|OUTPUT_DIRECTIVE_KEYWORD|'type'|'fun'|'ns'|'var'|'%dw'|'input'|IMPORT_DIRECTIVE_KEYWORD | '@' | 'annotation' | 'private'
+  // '---'|OUTPUT_DIRECTIVE_KEYWORD|'type'|'fun'|'ns'|'var'|'%dw'|'input'|IMPORT_DIRECTIVE_KEYWORD | '@' | 'annotation' | 'private' | 'internal'
   private static boolean HeaderRecover_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "HeaderRecover_0")) return false;
     boolean r;
@@ -1573,6 +1581,7 @@ public class WeaveParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, AT);
     if (!r) r = consumeToken(b, ANNOTATION_DIRECTIVE_KEYWORD);
     if (!r) r = consumeToken(b, PRIVATE_KEYWORD);
+    if (!r) r = consumeToken(b, INTERNAL_KEYWORD);
     return r;
   }
 
@@ -2403,15 +2412,16 @@ public class WeaveParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Annotation* 'private'? 'ns' NamespaceDefinition
+  // Annotation* 'private'? 'internal'? 'ns' NamespaceDefinition
   public static boolean NamespaceDirective(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "NamespaceDirective")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, NAMESPACE_DIRECTIVE, "<namespace directive>");
     r = NamespaceDirective_0(b, l + 1);
     r = r && NamespaceDirective_1(b, l + 1);
+    r = r && NamespaceDirective_2(b, l + 1);
     r = r && consumeToken(b, NAMESPACE_DIRECTIVE_KEYWORD);
-    p = r; // pin = 3
+    p = r; // pin = 4
     r = r && NamespaceDefinition(b, l + 1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
@@ -2432,6 +2442,13 @@ public class WeaveParser implements PsiParser, LightPsiParser {
   private static boolean NamespaceDirective_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "NamespaceDirective_1")) return false;
     consumeToken(b, PRIVATE_KEYWORD);
+    return true;
+  }
+
+  // 'internal'?
+  private static boolean NamespaceDirective_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "NamespaceDirective_2")) return false;
+    consumeToken(b, INTERNAL_KEYWORD);
     return true;
   }
 
@@ -3310,15 +3327,16 @@ public class WeaveParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Annotation* 'private'? 'type' TypeDefinition
+  // Annotation* 'private'? 'internal'? 'type' TypeDefinition
   public static boolean TypeDirective(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TypeDirective")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, TYPE_DIRECTIVE, "<type directive>");
     r = TypeDirective_0(b, l + 1);
     r = r && TypeDirective_1(b, l + 1);
+    r = r && TypeDirective_2(b, l + 1);
     r = r && consumeToken(b, TYPE_DIRECTIVE_KEYWORD);
-    p = r; // pin = 3
+    p = r; // pin = 4
     r = r && TypeDefinition(b, l + 1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
@@ -3339,6 +3357,13 @@ public class WeaveParser implements PsiParser, LightPsiParser {
   private static boolean TypeDirective_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TypeDirective_1")) return false;
     consumeToken(b, PRIVATE_KEYWORD);
+    return true;
+  }
+
+  // 'internal'?
+  private static boolean TypeDirective_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "TypeDirective_2")) return false;
+    consumeToken(b, INTERNAL_KEYWORD);
     return true;
   }
 
@@ -3713,15 +3738,16 @@ public class WeaveParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Annotation* 'private'? 'var' VariableDefinition
+  // Annotation* 'private'? 'internal'? 'var' VariableDefinition
   public static boolean VariableDirective(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "VariableDirective")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, VARIABLE_DIRECTIVE, "<variable directive>");
     r = VariableDirective_0(b, l + 1);
     r = r && VariableDirective_1(b, l + 1);
+    r = r && VariableDirective_2(b, l + 1);
     r = r && consumeToken(b, VAR_DIRECTIVE_KEYWORD);
-    p = r; // pin = 3
+    p = r; // pin = 4
     r = r && VariableDefinition(b, l + 1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
@@ -3742,6 +3768,13 @@ public class WeaveParser implements PsiParser, LightPsiParser {
   private static boolean VariableDirective_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "VariableDirective_1")) return false;
     consumeToken(b, PRIVATE_KEYWORD);
+    return true;
+  }
+
+  // 'internal'?
+  private static boolean VariableDirective_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "VariableDirective_2")) return false;
+    consumeToken(b, INTERNAL_KEYWORD);
     return true;
   }
 

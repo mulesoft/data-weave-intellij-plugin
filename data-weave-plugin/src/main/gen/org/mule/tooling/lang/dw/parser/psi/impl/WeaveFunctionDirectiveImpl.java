@@ -44,4 +44,9 @@ public class WeaveFunctionDirectiveImpl extends WeaveDirectiveImpl implements We
     return WeavePsiImplUtils.isPrivate(this);
   }
 
+  @Override
+  public boolean isInternal() {
+    return WeavePsiImplUtils.isInternal(this);
+  }
+
 }

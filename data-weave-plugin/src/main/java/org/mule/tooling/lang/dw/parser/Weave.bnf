@@ -77,6 +77,7 @@
         INPUT_DIRECTIVE_KEYWORD="input"
         VAR_DIRECTIVE_KEYWORD="var"
         PRIVATE_KEYWORD="private"
+        INTERNAL_KEYWORD="internal"
         FUNCTION_DIRECTIVE_KEYWORD="fun"
         ANNOTATION_DIRECTIVE_KEYWORD="annotation"
         NAMESPACE_DIRECTIVE_KEYWORD="ns"
@@ -148,7 +149,7 @@ AnnotationDefinition ::= Identifier '('( AnnotationParameter ( ',' AnnotationPar
 
 AnnotationParameter::= ((Identifier) ':' TypeLiteral) ('=' AnnotatedExpression)?
 
-private HeaderRecover::= !('---'|OUTPUT_DIRECTIVE_KEYWORD|'type'|'fun'|'ns'|'var'|'%dw'|'input'|IMPORT_DIRECTIVE_KEYWORD | '@' | 'annotation' | 'private')
+private HeaderRecover::= !('---'|OUTPUT_DIRECTIVE_KEYWORD|'type'|'fun'|'ns'|'var'|'%dw'|'input'|IMPORT_DIRECTIVE_KEYWORD | '@' | 'annotation' | 'private' | 'internal')
 
 VersionDirective::= Annotation* '%dw'  DOUBLE_LITERAL {pin=2}
 
@@ -163,9 +164,9 @@ ImportedElement::= Identifier ('as' ImportedElementAlias)? {
 
 ImportedElementAlias::=Identifier
 
-NamespaceDirective::= Annotation* 'private'? 'ns' NamespaceDefinition {
-    methods = [ isPrivate ]
-    pin = 3
+NamespaceDirective::= Annotation* 'private'? 'internal'? 'ns' NamespaceDefinition {
+    methods = [ isPrivate isInternal ]
+    pin = 4
 }
 
 NamespaceDefinition::=Identifier NAMESPACE_URI
@@ -176,16 +177,16 @@ NamespaceDefinition::=Identifier NAMESPACE_URI
       pin=1
  }
 
-VariableDirective::= Annotation* 'private'? 'var' VariableDefinition {
-    methods = [ isPrivate ]
-    pin = 3
+VariableDirective::= Annotation* 'private'? 'internal'? 'var' VariableDefinition {
+    methods = [ isPrivate isInternal ]
+    pin = 4
 }
 
 OutputDirective::= Annotation* OUTPUT_DIRECTIVE_KEYWORD (":" Type)? ((DataFormat ('with' Identifier)?) | Identifier) Options? {pin=2}
 
-TypeDirective::= Annotation* 'private'? 'type' TypeDefinition {
-    methods = [ isPrivate ]
-    pin = 3
+TypeDirective::= Annotation* 'private'? 'internal'? 'type' TypeDefinition {
+    methods = [ isPrivate isInternal ]
+    pin = 4
 }
 
 TypeDefinition::=Identifier TypeParameterDeclaration? '=' (TypeLiteral | UndefinedLiteral)
@@ -196,9 +197,9 @@ TypeDefinition::=Identifier TypeParameterDeclaration? '=' (TypeLiteral | Undefin
                       pin=1
                  }
 
-FunctionDirective::= Annotation* 'private'? 'fun' FunctionDefinition {
-    methods = [ isPrivate ]
-    pin = 3
+FunctionDirective::= Annotation* 'private'? 'internal'? 'fun' FunctionDefinition {
+    methods = [ isPrivate isInternal ]
+    pin = 4
 }
 
 FunctionDefinition::=Identifier TypeParameterDeclaration? L_PARREN ( FunctionParameter ( ',' FunctionParameter )* )? (",")? R_PARREN ( ":" (Type | DynamicReturn)? "=" | "=")? AnnotatedExpression

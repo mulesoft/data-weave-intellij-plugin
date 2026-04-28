@@ -64,6 +64,11 @@ public class WeaveFunctionDirectiveView extends PsiTreeElementBase<WeaveFunction
       icon.setIcon(PlatformIcons.FUNCTION_ICON, 0);
       icon.setIcon(PlatformIcons.PRIVATE_ICON, 1);
       return icon;
+    } else if (getElement() != null && getElement().isInternal()) {
+      RowIcon icon = new RowIcon(2);
+      icon.setIcon(PlatformIcons.FUNCTION_ICON, 0);
+      icon.setIcon(PlatformIcons.PACKAGE_LOCAL_ICON, 1);
+      return icon;
     }
     return PlatformIcons.FUNCTION_ICON;
   }

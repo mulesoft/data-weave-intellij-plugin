@@ -185,6 +185,7 @@ public interface WeaveTypes {
   IElementType IMPORT_DIRECTIVE_KEYWORD = new WeaveTokenType("IMPORT_DIRECTIVE_KEYWORD");
   IElementType INPUT_DIRECTIVE_KEYWORD = new WeaveTokenType("input");
   IElementType INTEGER_LITERAL = new WeaveTokenType("INTEGER_LITERAL");
+  IElementType INTERNAL_KEYWORD = new WeaveTokenType("internal");
   IElementType IS = new WeaveTokenType("is");
   IElementType LESS = new WeaveTokenType("<");
   IElementType LESS_EQUAL = new WeaveTokenType("<=");
