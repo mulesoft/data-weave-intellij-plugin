@@ -58,12 +58,21 @@ public class WeavePsiImplUtils {
         return directive.getNode().findChildByType(WeaveTypes.PRIVATE_KEYWORD) != null;
     }
 
+    public static boolean isInternal(WeaveDirective directive) {
+        return directive.getNode().findChildByType(WeaveTypes.INTERNAL_KEYWORD) != null;
+    }
+
     public static Icon getElementIcon(WeaveFunctionDefinition functionDefinition, final int flags) {
         if (functionDefinition.getParent() instanceof WeaveFunctionDirective directive) {
             if (directive.isPrivate()) {
                 RowIcon icon = new RowIcon(2);
                 icon.setIcon(PlatformIcons.FUNCTION_ICON, 0);
                 icon.setIcon(PlatformIcons.PRIVATE_ICON, 1);
+                return icon;
+            } else if (directive.isInternal()) {
+                RowIcon icon = new RowIcon(2);
+                icon.setIcon(PlatformIcons.FUNCTION_ICON, 0);
+                icon.setIcon(PlatformIcons.PACKAGE_LOCAL_ICON, 1);
                 return icon;
             }
         }
@@ -77,6 +86,11 @@ public class WeavePsiImplUtils {
                 icon.setIcon(PlatformIcons.VARIABLE_ICON, 0);
                 icon.setIcon(PlatformIcons.PRIVATE_ICON, 1);
                 return icon;
+            } else if (directive.isInternal()) {
+                RowIcon icon = new RowIcon(2);
+                icon.setIcon(PlatformIcons.VARIABLE_ICON, 0);
+                icon.setIcon(PlatformIcons.PACKAGE_LOCAL_ICON, 1);
+                return icon;
             }
         }
         return PlatformIcons.VARIABLE_ICON;
@@ -88,6 +102,11 @@ public class WeavePsiImplUtils {
                 RowIcon icon = new RowIcon(2);
                 icon.setIcon(PlatformIcons.CLASS_ICON, 0);
                 icon.setIcon(PlatformIcons.PRIVATE_ICON, 1);
+                return icon;
+            } else if (directive.isInternal()) {
+                RowIcon icon = new RowIcon(2);
+                icon.setIcon(PlatformIcons.CLASS_ICON, 0);
+                icon.setIcon(PlatformIcons.PACKAGE_LOCAL_ICON, 1);
                 return icon;
             }
         }
@@ -118,6 +137,11 @@ public class WeavePsiImplUtils {
                         RowIcon icon = new RowIcon(2);
                         icon.setIcon(PlatformIcons.FUNCTION_ICON, 0);
                         icon.setIcon(PlatformIcons.PRIVATE_ICON, 1);
+                        return icon;
+                    } else if (directive.isInternal()) {
+                        RowIcon icon = new RowIcon(2);
+                        icon.setIcon(PlatformIcons.FUNCTION_ICON, 0);
+                        icon.setIcon(PlatformIcons.PACKAGE_LOCAL_ICON, 1);
                         return icon;
                     }
                 }

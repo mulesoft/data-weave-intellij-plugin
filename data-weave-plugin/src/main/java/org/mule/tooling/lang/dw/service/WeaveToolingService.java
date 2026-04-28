@@ -10,6 +10,9 @@ import com.intellij.codeInsight.template.TemplateManager;
 import com.intellij.compiler.server.BuildManagerListener;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.Disposable;
+import com.intellij.ui.LayeredIcon;
+import com.intellij.util.IconUtil;
+import com.intellij.util.PlatformIcons;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.components.Service;
@@ -351,8 +354,21 @@ public final class WeaveToolingService implements Disposable {
         return result;
     }
 
-    private LookupElement createLookupItem(Suggestion item) {
+    private static javax.swing.Icon overlayScope(javax.swing.Icon base, boolean isPrivate, boolean isInternal) {
+        if (!isPrivate && !isInternal) {
+            return base;
+        }
+        LayeredIcon icon = new LayeredIcon(2);
+        icon.setIcon(base, 0);
+        if (isPrivate) {
+            icon.setIcon(PlatformIcons.PRIVATE_ICON, 1, 8, 8);
+        } else {
+            icon.setIcon(AllIcons.Nodes.PackageLocal, 1, 8, 8);
+        }
+        return icon;
+    }
 
+    private LookupElement createLookupItem(Suggestion item) {
 
         final Option<String> documentationMayBe = item.markdownDocumentation();
         String documentation = null;
@@ -363,19 +379,26 @@ public final class WeaveToolingService implements Disposable {
         elementBuilder = elementBuilder.withPresentableText(item.name());
 
 
+        boolean isPrivateScope = item.scope().isDefined() && item.scope().get() instanceof Scope.Private$;
+        boolean isInternalScope = item.scope().isDefined() && item.scope().get() instanceof Scope.Internal$;
+
         int itemType = item.itemType();
         if (itemType == SuggestionType.Class()) {
-            elementBuilder = elementBuilder.withIcon(AllIcons.Nodes.Class);
+            elementBuilder = elementBuilder.withIcon(overlayScope(AllIcons.Nodes.Class, isPrivateScope, isInternalScope));
         } else if (itemType == SuggestionType.Variable()) {
-            elementBuilder = elementBuilder.withIcon(AllIcons.Nodes.Variable);
+            elementBuilder = elementBuilder.withIcon(overlayScope(AllIcons.Nodes.Variable, isPrivateScope, isInternalScope));
         } else if (itemType == SuggestionType.Field()) {
-            elementBuilder = elementBuilder.withIcon(AllIcons.Nodes.Field);
+            elementBuilder = elementBuilder.withIcon(overlayScope(AllIcons.Nodes.Field, isPrivateScope, isInternalScope));
         } else if (itemType == SuggestionType.Function()) {
-            elementBuilder = elementBuilder.withIcon(AllIcons.Nodes.Function);
+            elementBuilder = elementBuilder.withIcon(overlayScope(AllIcons.Nodes.Function, isPrivateScope, isInternalScope));
         } else if (itemType == SuggestionType.Module()) {
             elementBuilder = elementBuilder.withIcon(WeaveIcons.DataWeaveModuleIcon);
         } else if (itemType == SuggestionType.Keyword()) {
             elementBuilder = elementBuilder.bold();
+        }
+
+        if (isPrivateScope || isInternalScope) {
+            elementBuilder = elementBuilder.withItemTextForeground(com.intellij.ui.JBColor.GRAY);
         }
 
 

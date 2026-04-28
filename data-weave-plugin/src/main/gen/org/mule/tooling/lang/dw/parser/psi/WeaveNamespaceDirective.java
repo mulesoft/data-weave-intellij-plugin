@@ -15,4 +15,6 @@ public interface WeaveNamespaceDirective extends WeaveDirective {
 
   boolean isPrivate();
 
+  boolean isInternal();
+
 }

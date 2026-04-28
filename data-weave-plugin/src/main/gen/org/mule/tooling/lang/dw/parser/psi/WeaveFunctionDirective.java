@@ -15,4 +15,6 @@ public interface WeaveFunctionDirective extends WeaveDirective {
 
   boolean isPrivate();
 
+  boolean isInternal();
+
 }

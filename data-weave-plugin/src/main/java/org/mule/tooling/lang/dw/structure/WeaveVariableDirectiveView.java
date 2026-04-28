@@ -36,6 +36,11 @@ public class WeaveVariableDirectiveView extends PsiTreeElementBase<WeaveVariable
       icon.setIcon(PlatformIcons.VARIABLE_ICON, 0);
       icon.setIcon(PlatformIcons.PRIVATE_ICON, 1);
       return icon;
+    } else if (getElement() != null && getElement().isInternal()) {
+      RowIcon icon = new RowIcon(2);
+      icon.setIcon(PlatformIcons.VARIABLE_ICON, 0);
+      icon.setIcon(PlatformIcons.PACKAGE_LOCAL_ICON, 1);
+      return icon;
     }
     return PlatformIcons.VARIABLE_ICON;
   }

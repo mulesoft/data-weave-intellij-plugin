@@ -48,7 +48,8 @@ public class WeaveGlobalDefinitionsIndexer extends FileBasedIndexExtension<Strin
                             PsiElement nameIdentifier = functionDefinition.getNameIdentifier();
                             if (nameIdentifier != null) {
                                 TextRange textRange = nameIdentifier.getTextRange();
-                                int scope =  directive.isPrivate() ? IdentifierScope.PRIVATE() : IdentifierScope.PUBLIC();
+                                int scope =  directive.isPrivate() ? IdentifierScope.PRIVATE() :
+                                            (directive.isInternal() ? IdentifierScope.INTERNAL() : IdentifierScope.PUBLIC());
                                 weaveIdentifiers.add(new GlobalElementIdentifier(textRange.getStartOffset(),
                                         textRange.getEndOffset(),
                                         functionDefinition.getName(),
@@ -66,7 +67,8 @@ public class WeaveGlobalDefinitionsIndexer extends FileBasedIndexExtension<Strin
                             List<GlobalElementIdentifier> weaveIdentifiers = result.computeIfAbsent(fqn, k -> new ArrayList<>());
                             PsiElement nameIdentifier = variableDefinition.getNameIdentifier();
                             if (nameIdentifier != null) {
-                                int scope =  directive.isPrivate() ? IdentifierScope.PRIVATE() : IdentifierScope.PUBLIC();
+                                int scope =  directive.isPrivate() ? IdentifierScope.PRIVATE() :
+                                            (directive.isInternal() ? IdentifierScope.INTERNAL() : IdentifierScope.PUBLIC());
                                 TextRange textRange = nameIdentifier.getTextRange();
                                 weaveIdentifiers.add(new GlobalElementIdentifier(textRange.getStartOffset(),
                                         textRange.getEndOffset(),
@@ -85,7 +87,8 @@ public class WeaveGlobalDefinitionsIndexer extends FileBasedIndexExtension<Strin
                             List<GlobalElementIdentifier> weaveIdentifiers = result.computeIfAbsent(fqn, k -> new ArrayList<>());
                             PsiElement nameIdentifier = typeDefinition.getNameIdentifier();
                             if (nameIdentifier != null) {
-                                int scope =  directive.isPrivate() ? IdentifierScope.PRIVATE() : IdentifierScope.PUBLIC();
+                                int scope =  directive.isPrivate() ? IdentifierScope.PRIVATE() :
+                                            (directive.isInternal() ? IdentifierScope.INTERNAL() : IdentifierScope.PUBLIC());
                                 TextRange textRange = nameIdentifier.getTextRange();
                                 weaveIdentifiers.add(new GlobalElementIdentifier(textRange.getStartOffset(),
                                         textRange.getEndOffset(),
@@ -149,7 +152,7 @@ public class WeaveGlobalDefinitionsIndexer extends FileBasedIndexExtension<Strin
 
     @Override
     public int getVersion() {
-        return 0;
+        return 1; // Incremented for internal scope support
     }
 
     @Override
